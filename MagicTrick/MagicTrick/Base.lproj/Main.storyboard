@@ -1,27 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A278a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <arscnView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="BrB-h1-WRS">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="MagicTrick" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vWI-F8-Giu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arscnView>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="coT-WH-7WA">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="DQn-w2-8SE">
+                                <rect key="frame" x="20" y="567" width="335" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3dJ-bZ-BDg">
+                                        <rect key="frame" x="0.0" y="0.0" width="142.5" height="30"/>
+                                        <state key="normal" title="Magic"/>
+                                        <connections>
+                                            <action selector="magicPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="aJ9-kk-XKM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="naH-aW-vQe">
+                                        <rect key="frame" x="192.5" y="0.0" width="142.5" height="30"/>
+                                        <state key="normal" title="Throw!"/>
+                                        <connections>
+                                            <action selector="throwPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="bNP-zN-jbc"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="coT-WH-7WA" firstAttribute="leading" secondItem="vWI-F8-Giu" secondAttribute="leading" id="AiA-ov-PuF"/>
+                            <constraint firstAttribute="trailing" secondItem="DQn-w2-8SE" secondAttribute="trailing" constant="20" id="Jaw-Np-Ugx"/>
+                            <constraint firstAttribute="bottom" secondItem="DQn-w2-8SE" secondAttribute="bottom" constant="70" id="cRd-6F-d6w"/>
+                            <constraint firstAttribute="trailing" secondItem="coT-WH-7WA" secondAttribute="trailing" id="ggR-gb-seg"/>
+                            <constraint firstAttribute="bottom" secondItem="coT-WH-7WA" secondAttribute="bottom" id="nDQ-lU-gIQ"/>
+                            <constraint firstItem="DQn-w2-8SE" firstAttribute="leading" secondItem="vWI-F8-Giu" secondAttribute="leading" constant="20" id="vDc-xu-R2S"/>
+                            <constraint firstItem="coT-WH-7WA" firstAttribute="top" secondItem="vWI-F8-Giu" secondAttribute="top" id="veZ-NU-Xgu"/>
+                        </constraints>
+                    </view>
                     <connections>
-                        <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="sceneView" destination="coT-WH-7WA" id="iYX-M4-8X2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.74384236453201"/>
         </scene>
     </scenes>
 </document>
