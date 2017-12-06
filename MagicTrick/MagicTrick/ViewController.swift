@@ -14,6 +14,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    private var planeNode: SCNNode?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,10 +26,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/hat.scn")!
+        let scene = SCNScene()
         
         // Set the scene to the view
         sceneView.scene = scene
+        sceneView.antialiasingMode = .multisampling4X
+        
+        addUITapGestureForHitTest()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,7 +40,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-
+        
+        configuration.planeDetection = .horizontal
+        configuration.worldAlignment = .gravity
+        configuration.isLightEstimationEnabled = true
+        
         // Run the view's session
         sceneView.session.run(configuration)
     }
@@ -47,21 +56,114 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-
-    // MARK: - ARSCNViewDelegate
+    // MARK: - Actions
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
+    @IBAction func magicPressed(_ sender: Any) {
+        
+    }
+    
+    @IBAction func throwPressed(_ sender: Any) {
+        
+    }
+    
+    @IBAction func didTapView(_ sender: UITapGestureRecognizer) {
+        
+        let tapLocation = sender.location(in: sceneView)
+        
+        let results = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
+        
+        if let result = results.first {
+            addHat(withResult: result)
+            addFloor(withResult: result)
+        }
+    }
+    
+    func addHat(withResult result: ARHitTestResult) {
+        
+        let transform = result.worldTransform
+        
+        let planePosition = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+        
+        let hatNode = createHatForScene(inPosition: planePosition)!
+        hatNode.name = "hat"
+        sceneView.scene.rootNode.addChildNode(hatNode)
+        
+    }
+    
+    private func createHatForScene(inPosition position: SCNVector3) -> SCNNode? {
+        guard let url = Bundle.main.url(forResource: "art.scnassets/magic-hat", withExtension: "scn") else {
+            NSLog("Could not find hat scene")
+            return nil
+        }
+        guard let node = SCNReferenceNode(url: url) else {
+            return nil
+        }
+        
+        node.load()
+        
+        node.position = position
+        
         return node
     }
-*/
+    
+    func addFloor(withResult result: ARHitTestResult) {
+        
+        let transform = result.worldTransform
+        
+        let planePosition = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+        
+        let floorNode = createFloorForScene(inPosition: planePosition)!
+        sceneView.scene.rootNode.addChildNode(floorNode)
+        
+    }
+    
+    private func createFloorForScene(inPosition position: SCNVector3) -> SCNNode? {
+        
+        let floorNode = SCNNode()
+        let floor = SCNFloor()
+        floorNode.geometry = floor
+        floorNode.geometry?.firstMaterial?.diffuse.contents = UIColor.clear
+        floorNode.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        floorNode.position = position
+        
+        return floorNode
+    }
+    
+}
+
+// MARK: - ARSCNViewDelegate
+
+extension ViewController {
+    
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        guard let _ = anchor as? ARPlaneAnchor else {
+            return nil
+        }
+        
+        planeNode = SCNNode()
+        return planeNode
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        
+        guard let planeAnchor = anchor as? ARPlaneAnchor else {
+            return
+        }
+        
+        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+        
+        let planeMaterial = SCNMaterial()
+        planeMaterial.diffuse.contents = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.3)
+        plane.materials = [planeMaterial]
+        
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+        
+        planeNode.transform = SCNMatrix4MakeRotation(-Float.pi / 1.5, 1.5, 0, 0)
+        
+        node.addChildNode(planeNode)
+        
+    }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -78,14 +180,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
-    // MARK: - Actions
+}
+
+// MARK: - UITapGestureRecognizer
+
+extension ViewController {
     
-    @IBAction func magicPressed(_ sender: Any) {
-        
-    }
-    
-    @IBAction func throwPressed(_ sender: Any) {
-        
+    func addUITapGestureForHitTest() {
+        let tap = UITapGestureRecognizer()
+        tap.numberOfTapsRequired = 1
+        tap.addTarget(self, action: #selector(didTapView(_:)))
+        sceneView.addGestureRecognizer(tap)
     }
     
 }
