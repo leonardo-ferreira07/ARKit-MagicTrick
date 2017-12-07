@@ -70,6 +70,7 @@
                         <viewLayoutGuide key="safeArea" id="gHl-a3-e5t"/>
                     </view>
                     <connections>
+                        <outlet property="magicButton" destination="3dJ-bZ-BDg" id="cdq-3W-SbJ"/>
                         <outlet property="sceneView" destination="coT-WH-7WA" id="iYX-M4-8X2"/>
                     </connections>
                 </viewController>

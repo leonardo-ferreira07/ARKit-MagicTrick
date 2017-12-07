@@ -13,8 +13,10 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    @IBOutlet weak var magicButton: DesignableButton!
     
     private var planeNode: SCNNode?
+    private var placedHat = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +98,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let results = sceneView.hitTest(tapLocation, types: .existingPlaneUsingExtent)
         
-        if let result = results.first {
+        if let result = results.first, !placedHat {
+            placedHat = true
             addHat(withResult: result)
             addFloor(withResult: result)
         }
