@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="DQn-w2-8SE">
-                                <rect key="frame" x="20" y="567" width="335" height="30"/>
+                                <rect key="frame" x="20" y="582" width="335" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3dJ-bZ-BDg" customClass="DesignableButton" customModule="MagicTrick" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="142.5" height="30"/>
@@ -61,7 +61,7 @@
                         <constraints>
                             <constraint firstItem="coT-WH-7WA" firstAttribute="leading" secondItem="vWI-F8-Giu" secondAttribute="leading" id="AiA-ov-PuF"/>
                             <constraint firstAttribute="trailing" secondItem="DQn-w2-8SE" secondAttribute="trailing" constant="20" id="Jaw-Np-Ugx"/>
-                            <constraint firstAttribute="bottom" secondItem="DQn-w2-8SE" secondAttribute="bottom" constant="70" id="cRd-6F-d6w"/>
+                            <constraint firstAttribute="bottom" secondItem="DQn-w2-8SE" secondAttribute="bottom" constant="55" id="cRd-6F-d6w"/>
                             <constraint firstAttribute="trailing" secondItem="coT-WH-7WA" secondAttribute="trailing" id="ggR-gb-seg"/>
                             <constraint firstAttribute="bottom" secondItem="coT-WH-7WA" secondAttribute="bottom" id="nDQ-lU-gIQ"/>
                             <constraint firstItem="DQn-w2-8SE" firstAttribute="leading" secondItem="vWI-F8-Giu" secondAttribute="leading" constant="20" id="vDc-xu-R2S"/>

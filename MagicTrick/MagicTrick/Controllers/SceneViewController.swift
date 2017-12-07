@@ -35,6 +35,7 @@ class SceneViewController: UIViewController, ARSCNViewDelegate {
         sceneView.antialiasingMode = .multisampling4X
         
         addUITapGestureForHitTest()
+        enableMagicButton(false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -150,6 +151,7 @@ class SceneViewController: UIViewController, ARSCNViewDelegate {
         let hatNode = createHatForScene(inPosition: planePosition)!
         hatNode.name = "hat"
         sceneView.scene.rootNode.addChildNode(hatNode)
+        enableMagicButton(true)
         
     }
     
@@ -268,10 +270,17 @@ extension SceneViewController {
             let mat = SCNMatrix4(frame.camera.transform)
             
             let dir = SCNVector3(-2 * mat.m31, -2 * mat.m32, -2 * mat.m33)
-//            let pos = SCNVector3(mat.m41, mat.m42, mat.m43)
             
             return dir
         }
         return SCNVector3(0, 0, -1)
+    }
+}
+
+// MARK: - Magic Button Configuration
+
+extension SceneViewController {
+    func enableMagicButton(_ enabled: Bool) {
+        magicButton.isEnabled = enabled
     }
 }
