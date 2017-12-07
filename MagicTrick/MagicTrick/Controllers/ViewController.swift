@@ -64,6 +64,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func throwPressed(_ sender: Any) {
         
+        let sphere = SCNSphere(radius: 0.15)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.red
+        material.lightingModel = .physicallyBased
+        sphere.materials = [material]
+        let sphereNode = SCNNode(geometry: sphere)
+        sphereNode.name = "ball"
+        
+        sphereNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        sphereNode.physicsBody?.isAffectedByGravity = true
+        sphereNode.physicsBody?.mass = 0.5
+        sphereNode.physicsBody?.restitution = 0.5
+        sphereNode.physicsBody?.friction = 0.5
+        
+        let camera = self.sceneView.pointOfView!
+        let position = SCNVector3(x: 0, y: 0, z: -0.20)
+        sphereNode.position = camera.convertPosition(position, to: nil)
+        sphereNode.rotation = camera.rotation
+        
+        let direction = getCameraDirection()
+        let sphereDirection = direction
+        sphereNode.physicsBody?.applyForce(sphereDirection, asImpulse: true)
+        
+        sceneView.scene.rootNode.addChildNode(sphereNode)
     }
     
     @IBAction func didTapView(_ sender: UITapGestureRecognizer) {
@@ -193,4 +217,22 @@ extension ViewController {
         sceneView.addGestureRecognizer(tap)
     }
     
+}
+
+// MARK: - Get user direction
+
+extension ViewController {
+    func getCameraDirection() -> SCNVector3 {
+        
+        if let frame = self.sceneView.session.currentFrame {
+            
+            let mat = SCNMatrix4(frame.camera.transform)
+            
+            let dir = SCNVector3(-2 * mat.m31, -2 * mat.m32, -2 * mat.m33)
+//            let pos = SCNVector3(mat.m41, mat.m42, mat.m43)
+            
+            return dir
+        }
+        return SCNVector3(0, 0, -1)
+    }
 }
