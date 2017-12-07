@@ -1,5 +1,5 @@
 # ARKit-MagicTrick
-#### Udacity final project from on Apple's ARKit framework course.
+#### Udacity final project on Apple's ARKit framework course.
 
 This app was tested on an iPhone X device running iOS 11.2
 
