@@ -68,7 +68,6 @@ class SceneViewController: UIViewController, ARSCNViewDelegate {
         }
         
         if button.titleLabel?.text == "Magic" {
-            
             button.setTitle("Doing Magic 🎩", for: .normal)
             
             sceneView.scene.rootNode.enumerateChildNodes {node, _ in
