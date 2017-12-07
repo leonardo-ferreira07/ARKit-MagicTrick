@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class SceneViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     @IBOutlet weak var magicButton: DesignableButton!
@@ -62,11 +62,47 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func magicPressed(_ sender: Any) {
         
+        guard let button = sender as? UIButton else {
+            return
+        }
+        
+        if button.titleLabel?.text == "Magic" {
+            
+            button.setTitle("Doing Magic 🎩", for: .normal)
+            guard let hat = sceneView.scene.rootNode.childNode(withName: "hat", recursively:true) else { return }
+            
+            let min = hat.convertPosition((hat.boundingBox.min), to: sceneView.scene.rootNode)
+            let max = hat.convertPosition((hat.boundingBox.max), to: sceneView.scene.rootNode)
+            
+            sceneView.scene.rootNode.enumerateChildNodes {node,_ in
+                
+                if node.presentation.position.x < 0.99*(max.x) && node.presentation.position.x > 0.99*(min.x) && node.presentation.position.y < 0.99*(max.y) && node.presentation.position.y > 0.99*(min.y) && node.presentation.position.z < 0.99*(max.z) && node.presentation.position.z > 0.99*(min.z) {
+                    
+                    node.geometry?.firstMaterial?.transparencyMode = .rgbZero
+                }
+            }
+        } else {
+            button.setTitle("Magic", for: .normal)
+            
+            guard let hat = sceneView.scene.rootNode.childNode(withName: "hat", recursively:true) else {return}
+            
+            let min = hat.convertPosition((hat.boundingBox.min), to: sceneView.scene.rootNode)
+            let max = hat.convertPosition((hat.boundingBox.max), to: sceneView.scene.rootNode)
+            
+            sceneView.scene.rootNode.enumerateChildNodes {node,_ in
+                
+                if node.presentation.position.x < 0.99*(max.x) && node.presentation.position.x > 0.99*(min.x) && node.presentation.position.y < 0.99*(max.y) && node.presentation.position.y > 0.99*(min.y) && node.presentation.position.z < 0.99*(max.z) && node.presentation.position.z > 0.99*(min.z) {
+                    
+                    node.geometry?.firstMaterial?.transparencyMode = SCNTransparencyMode(rawValue: 0)!
+                }
+            }
+        }
+        
     }
     
     @IBAction func throwPressed(_ sender: Any) {
         
-        let sphere = SCNSphere(radius: 0.15)
+        let sphere = SCNSphere(radius: 0.015)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
         material.lightingModel = .physicallyBased
@@ -160,7 +196,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
 // MARK: - ARSCNViewDelegate
 
-extension ViewController {
+extension SceneViewController {
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         guard let _ = anchor as? ARPlaneAnchor else {
@@ -211,7 +247,7 @@ extension ViewController {
 
 // MARK: - UITapGestureRecognizer
 
-extension ViewController {
+extension SceneViewController {
     
     func addUITapGestureForHitTest() {
         let tap = UITapGestureRecognizer()
@@ -224,7 +260,7 @@ extension ViewController {
 
 // MARK: - Get user direction
 
-extension ViewController {
+extension SceneViewController {
     func getCameraDirection() -> SCNVector3 {
         
         if let frame = self.sceneView.session.currentFrame {
