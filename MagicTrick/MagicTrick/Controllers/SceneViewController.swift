@@ -70,30 +70,17 @@ class SceneViewController: UIViewController, ARSCNViewDelegate {
         if button.titleLabel?.text == "Magic" {
             
             button.setTitle("Doing Magic 🎩", for: .normal)
-            guard let hat = sceneView.scene.rootNode.childNode(withName: "hat", recursively:true) else { return }
             
-            let min = hat.convertPosition((hat.boundingBox.min), to: sceneView.scene.rootNode)
-            let max = hat.convertPosition((hat.boundingBox.max), to: sceneView.scene.rootNode)
-            
-            sceneView.scene.rootNode.enumerateChildNodes {node,_ in
-                
-                if node.presentation.position.x < 0.99*(max.x) && node.presentation.position.x > 0.99*(min.x) && node.presentation.position.y < 0.99*(max.y) && node.presentation.position.y > 0.99*(min.y) && node.presentation.position.z < 0.99*(max.z) && node.presentation.position.z > 0.99*(min.z) {
-                    
+            sceneView.scene.rootNode.enumerateChildNodes {node, _ in
+                if isBallInsideBoundingBox(node) {
                     node.geometry?.firstMaterial?.transparencyMode = .rgbZero
                 }
             }
         } else {
             button.setTitle("Magic", for: .normal)
             
-            guard let hat = sceneView.scene.rootNode.childNode(withName: "hat", recursively:true) else {return}
-            
-            let min = hat.convertPosition((hat.boundingBox.min), to: sceneView.scene.rootNode)
-            let max = hat.convertPosition((hat.boundingBox.max), to: sceneView.scene.rootNode)
-            
-            sceneView.scene.rootNode.enumerateChildNodes {node,_ in
-                
-                if node.presentation.position.x < 0.99*(max.x) && node.presentation.position.x > 0.99*(min.x) && node.presentation.position.y < 0.99*(max.y) && node.presentation.position.y > 0.99*(min.y) && node.presentation.position.z < 0.99*(max.z) && node.presentation.position.z > 0.99*(min.z) {
-                    
+            sceneView.scene.rootNode.enumerateChildNodes {node, _ in
+                if isBallInsideBoundingBox(node) {
                     node.geometry?.firstMaterial?.transparencyMode = SCNTransparencyMode(rawValue: 0)!
                 }
             }
@@ -282,5 +269,25 @@ extension SceneViewController {
 extension SceneViewController {
     func enableMagicButton(_ enabled: Bool) {
         magicButton.isEnabled = enabled
+    }
+}
+
+// MARK: - Ball inside bounding box verification
+
+extension SceneViewController {
+    func isBallInsideBoundingBox(_ node: SCNNode) -> Bool {
+        
+        guard let hat = sceneView.scene.rootNode.childNode(withName: "hat", recursively: true) else {
+            return false
+        }
+        
+        let min = hat.convertPosition((hat.boundingBox.min), to: sceneView.scene.rootNode)
+        let max = hat.convertPosition((hat.boundingBox.max), to: sceneView.scene.rootNode)
+        
+        if node.presentation.position.x < 0.99*(max.x) && node.presentation.position.x > 0.99*(min.x) && node.presentation.position.y < 0.99*(max.y) && node.presentation.position.y > 0.99*(min.y) && node.presentation.position.z < 0.99*(max.z) && node.presentation.position.z > 0.99*(min.z) {
+            return true
+        }
+        
+        return false
     }
 }
